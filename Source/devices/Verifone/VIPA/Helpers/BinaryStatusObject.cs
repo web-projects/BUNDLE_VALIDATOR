@@ -54,7 +54,7 @@ namespace Devices.Verifone.VIPA.Helpers
         public const string UNLOCK_CONFIG_HASH = "457EB4980E801C1D7883608B0A8CB492";
         public const int UNLOCK_CONFIG_SIZE = 0x5000;
 
-        public const string SPHERE_DEVICEHEALTH_FILEDIR  = "www/mapp";
+        public const string SPHERE_DEVICEHEALTH_FILEDIR = "www/mapp";
         public const string SPHERE_DEVICEHEALTH_FILENAME = "SphereDeviceHealth.txt";
         public const int BINARY_READ_MAXLEN = 0xF8;
 
@@ -1822,7 +1822,7 @@ namespace Devices.Verifone.VIPA.Helpers
                 ["SPHERE_IP4_199_24"] = (VIPA_BUNDLES_24, DeviceConfigurationTypes.IdleConfiguration, new string[] { BinaryStatusObject.DEVICE_P400 }, VIPA_VER_IDLE, SPHERE_VIPA_VER_IDLE_HASH_P400_199, SPHERE_VIPA_VER_IDLE_FILESIZE_P400_199),
                 ["SPHERE_IP4_250_24"] = (VIPA_BUNDLES_24, DeviceConfigurationTypes.IdleConfiguration, new string[] { BinaryStatusObject.DEVICE_M400 }, VIPA_VER_IDLE, SPHERE_VIPA_VER_IDLE_HASH_M400_250, SPHERE_VIPA_VER_IDLE_FILESIZE_M400_250),
                 ["SPHERE_NJT_199_24"] = (VIPA_BUNDLES_24, DeviceConfigurationTypes.IdleConfiguration, new string[] { BinaryStatusObject.DEVICE_UX301 }, VIPA_VER_IDLE, SPHERE_VIPA_VER_IDLE_HASH_UX301_NJT, SPHERE_VIPA_VER_IDLE_FILESIZE_UX301_NJT),
-                
+
                 // VIPA 6.8.2.28
                 ["SPHERE_BSM4_28"] = (VIPA_BUNDLES_28, DeviceConfigurationTypes.BaseConfiguration, new string[] { BinaryStatusObject.DEVICE_M400 }, VIPA_VER_FW, SPHERE_VIPA_VER_FW_HASH_M400_28, SPHERE_VIPA_VER_FW_FILESIZE_M400_28),
                 ["SPHERE_BSP2_28"] = (VIPA_BUNDLES_28, DeviceConfigurationTypes.BaseConfiguration, new string[] { BinaryStatusObject.DEVICE_P200 }, VIPA_VER_FW, SPHERE_VIPA_VER_FW_HASH_P200_28, SPHERE_VIPA_VER_FW_FILESIZE_P200_28),

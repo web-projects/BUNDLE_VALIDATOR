@@ -233,9 +233,9 @@ namespace Devices.Verifone.Connection
         /// <param name="responseTaglessHandler"></param>
         /// <param name="responseContactlessHandler"></param>
         /// <param name="isChainedMessageResponse"></param>
-        public void ReadAndExecute(VIPAImpl.ResponseTagsHandlerDelegate responseTagsHandler, 
-            VIPAImpl.ResponseTaglessHandlerDelegate responseTaglessHandler, 
-            VIPAImpl.ResponseCLessHandlerDelegate responseContactlessHandler, 
+        public void ReadAndExecute(VIPAImpl.ResponseTagsHandlerDelegate responseTagsHandler,
+            VIPAImpl.ResponseTaglessHandlerDelegate responseTaglessHandler,
+            VIPAImpl.ResponseCLessHandlerDelegate responseContactlessHandler,
             bool isChainedMessageResponse = false)
         {
             bool addedResponseComponent = true;
@@ -476,7 +476,7 @@ namespace Devices.Verifone.Connection
                     {
                         Debug.WriteLineIf(SerialConnection.LogSerialBytes, $"VIPA-RRCBADD [{comPort}]|FRAME#{frame++}: {BitConverter.ToString(workerBuffer, 0, workerBufferLen)}");
                         workerPool.Return(workerBuffer);
-                        deviceLogHandler?.Invoke(LogLevel.Error, 
+                        deviceLogHandler?.Invoke(LogLevel.Error,
                             string.Format("VIPA: message LRC error - Current=[0x{0:X2}] != Calculated=[0x{1:X2}]", workerBuffer[workerBufferLen], lrc));
                         readErrorLevel = ReadErrorLevel.Missing_LRC;
                         return true;

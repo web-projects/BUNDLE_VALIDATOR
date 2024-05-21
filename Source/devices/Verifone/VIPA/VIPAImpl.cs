@@ -8,7 +8,6 @@ using Config.Helpers;
 using Devices.Common;
 using Devices.Common.AppConfig;
 using Devices.Common.Config;
-using Devices.Common.DebugDump;
 using Devices.Common.Helpers;
 using Devices.Common.Helpers.Templates;
 using Devices.Verifone.Connection;
@@ -850,7 +849,7 @@ namespace Devices.Verifone.VIPA
             byte p1 = Convert.ToByte(BinaryStatusObject.LogLevelDefault, 16);
 
             // Log Level
-            (DeviceInfoObject deviceInfoObject, int VipaResponse) deviceResponse = 
+            (DeviceInfoObject deviceInfoObject, int VipaResponse) deviceResponse =
                 LogConfigurationReset(p1, E0Template.HTMLKeyName, Encoding.ASCII.GetBytes("LOG_LEVEL"),
                                       E0Template.HTMLValueName, Encoding.ASCII.GetBytes(BinaryStatusObject.LogLevelDefault));
             DeviceLogger(LogLevel.Info, string.Format("VIPA SET [LOG_LEVEL] RESULT=0x{0:X4}", deviceResponse.VipaResponse));
