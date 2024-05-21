@@ -524,7 +524,7 @@ namespace Devices.Verifone
 
                         if (showVipaVersionsResponse.VipaResponse == (int)VipaSW1SW2Codes.Success)
                         {
-                            //    await Task.Delay(1000);
+                            //await Task.Delay(1000);
                             Thread.Sleep(10000);
                         }
                     }
@@ -630,13 +630,10 @@ namespace Devices.Verifone
                         message += $"<p>VFSRED: {DeviceInformation.VOSVersions.ADKSRED}</p>";
                         string style_post = "</div>";
                         string displayMessage = style_pre + message + style_post;
-                        (LinkDALRequestIPA5Object LinkActionRequestIPA5Object, int VipaResponse) showVipaVersionsResponse = VipaDevice.DisplayCustomScreenHTML(displayMessage);
+                        _ = VipaDevice.DisplayCustomScreenHTML(displayMessage);
 
-                        if (showVipaVersionsResponse.VipaResponse == (int)VipaSW1SW2Codes.Success)
-                        {
-                            //    await Task.Delay(1000);
-                            Thread.Sleep(10000);
-                        }
+                        // delete dummy file to indicate task completion
+                        FileCoordinator.DoWork(FileCoordinatorOps.DummyDelete);
                     }
                 }
             }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using DEVICE_CORE;
 
-namespace DEVICE_CORE
+namespace VerifoneBundleValidator.Config
 {
     public class Devices
     {

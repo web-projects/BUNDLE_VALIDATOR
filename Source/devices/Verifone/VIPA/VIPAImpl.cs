@@ -17,6 +17,7 @@ using Devices.Verifone.VIPA.Interfaces;
 using Devices.Verifone.VIPA.TagLengthValue;
 using System;
 using System.Buffers;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -135,6 +136,10 @@ namespace Devices.Verifone.VIPA
 
         // EMV Workflow
         public TaskCompletionSource<(LinkDALRequestIPA5Object linkDALRequestIPA5Object, int VipaResponse)> DecisionRequiredInformation = null;
+
+        public TaskCompletionSource<int[]> MultiResponseCodeResult = null;
+        private int multiResponseRequiredAmount;
+        private ConcurrentBag<int> multiResponseCodes;
 
         public event DeviceLogHandler DeviceLogHandler;
 
@@ -1207,11 +1212,45 @@ namespace Devices.Verifone.VIPA
             };
             byte[] customScreenDataData = TLV.Encode(customScreenData);
 
+            // Expect 2 chained responses
+            SetupMultiResponseHandler(2);
+            SubscribeResponseTagsHandler(MultiResponseCodeHandler, true);
+
             SendVipaCommand(VIPACommandType.DisplayHTML, 0x00, 0x01, customScreenDataData);
 
-            (int vipaResponse, int vipaData) commandResult = (ResponseCodeResult.Task.Result, 0);
+            Task<Task> whenEither = Task.WhenAny(Task.Delay(VerifoneConstants.MaxWorkflowDelayMilliseconds), MultiResponseCodeResult.Task);
 
-            return commandResult;
+            int vipaDataInResponse = 0;
+            int displayCommandResponseCode = (int)VipaSW1SW2Codes.Failure;
+
+            if (MultiResponseCodeResult.Task == whenEither.Result)
+            {
+                int[] chainResult = MultiResponseCodeResult.Task.Result;
+                // The DisplayHTML command sends back 2 responses
+                // VIPA manual: Followed by another response carrying HTML result
+                if (chainResult.Length >= 2)
+                {
+                    // 2nd command is the response carrying HTML result
+                    displayCommandResponseCode = chainResult[1];
+                }
+                else
+                {
+                    displayCommandResponseCode = chainResult[0];
+                }
+            }
+
+            return (displayCommandResponseCode, vipaDataInResponse);
+        }
+
+        /// <summary>
+        /// Setup the chain response handler for handling new responses.
+        /// </summary>
+        /// <param name="expectedAmount">Amount of responses to chain</param>
+        private void SetupMultiResponseHandler(int expectedAmount)
+        {
+            multiResponseRequiredAmount = expectedAmount;
+            multiResponseCodes = new ConcurrentBag<int>();
+            MultiResponseCodeResult = new TaskCompletionSource<int[]>();
         }
 
         private (DeviceInfoObject deviceInfoObject, int VipaResponse) GetDeviceResponse(int timeoutMS)
@@ -2540,6 +2579,25 @@ namespace Devices.Verifone.VIPA
 
             // command must always be processed
             LoggerLevelInformation?.TrySetResult((deviceResponse, responseCode));
+        }
+
+        public void MultiResponseCodeHandler(List<TLV> tags, int responseCode, bool cancelled = false)
+        {
+            // If cancelled, just set results immediately
+            if (cancelled)
+            {
+                MultiResponseCodeResult?.TrySetResult(new int[] { -1 });
+            }
+            else
+            {
+                // Add the chain responses until they reach the desired chain length
+                multiResponseCodes?.Add(responseCode);
+
+                if (multiResponseCodes?.Count >= multiResponseRequiredAmount)
+                {
+                    MultiResponseCodeResult?.TrySetResult(multiResponseCodes.ToArray());
+                }
+            }
         }
 
         private void SubscribeResponseCLessTagHandler(ResponseCLessHandlerDelegate handler, bool subscribe)

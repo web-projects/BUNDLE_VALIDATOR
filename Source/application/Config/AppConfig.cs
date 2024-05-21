@@ -1,6 +1,10 @@
-﻿namespace DEVICE_CORE
+﻿using DEVICE_CORE;
+using System;
+
+namespace VerifoneBundleValidator.Config
 {
-    public class Config
+    [Serializable]
+    internal class AppConfig
     {
         public Application Application { get; set; }
         public Devices Devices { get; set; }

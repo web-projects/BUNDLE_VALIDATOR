@@ -1,8 +1,11 @@
-﻿namespace DEVICE_CORE
+﻿using System;
+
+namespace VerifoneBundleValidator.Config
 {
+    [Serializable]
     public class Colors
     {
-        public string ForeGround { get; set; }
-        public string BackGround { get; set; }
+        public string ForeGround { get; set; } = "WHITE";
+        public string BackGround { get; set; } = "BLUE";
     }
 }
