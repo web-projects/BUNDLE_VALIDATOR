@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "VerifoneBundleValidator": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Development\\DEVICES\\verifone\\BUNDLE_VALIDATOR\\Source\\application\\bin\\Debug\\netcoreapp3.1\\win10-x64\\VerifoneBundleValidator.exe"
+    }
+  }
+}
