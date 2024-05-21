@@ -85,7 +85,7 @@ namespace DEVICE_CORE
                 await application.Command(LinkDeviceActionType.ReportBundleVersions).ConfigureAwait(false);
 
                 // IDLE SCREEN
-                //await application.Command(LinkDeviceActionType.DisplayIdleScreen).ConfigureAwait(false);
+                await application.Command(LinkDeviceActionType.DisplayIdleScreen).ConfigureAwait(false);
             }
 
             // wait for dummy file to be deleted
